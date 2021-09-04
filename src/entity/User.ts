@@ -1,4 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { IsEmail, IsDate, Min} from "class-validator";
+
 
 export enum UserRole {
     ADMIN = "admin",
@@ -25,12 +27,16 @@ export class User {
     role: UserRole;
 
     @Column({unique:true})
+    @IsEmail()
     email:string;
 
-    @Column("double")
-    phoneNumber: number;
-
     @Column()
+    @Min(8)
     password:string;
+
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
+    createDate: string;
+
+    
 
 }

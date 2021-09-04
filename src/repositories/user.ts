@@ -1,9 +1,8 @@
 import { User } from "../entity/User";
 import {Request, Response} from 'express';
 import { connection} from '../config/db';
-const Joi = require('joi');
+import {validate} from "class-validator";
 import * as jwt from "jsonwebtoken";
-const { schemaUser } = require('../middlewares/validation');
 import * as bcrypt from 'bcryptjs';
 
 
@@ -23,19 +22,23 @@ import * as bcrypt from 'bcryptjs';
    
     public saveUser (req: Request, res: Response) {
         connection.then(async database=>{
-            const { error } = Joi.validate(req.body, schemaUser);
-            if(error) return res.status(400).send(error.details[0].message);
-            const emailExist = await database.getRepository(User).findOne({email:req.body.email});
-            if(emailExist) return res.status(400).send("Email already exists")
+            console.log(req.body)
+            const errors = await validate(req.body);
+            if (errors.length > 0) {
+                throw new Error(`Validation failed!`); 
+            } else {
+                const emailExist = await database.getRepository(User).findOne({email:req.body.email});
+                if(emailExist) return res.status(400).send("Email already exists")
 
-            // Hash
-            const salt = await bcrypt.genSalt(10);
-            const hashPassword = await bcrypt.hash(req.body.password, salt)
-
-            let urs = await database.getRepository(User).create(req.body);
-            let results = await database.getRepository(User).save(urs);
+                // Hash
+                const salt = await bcrypt.genSalt(10);
+                const hashPassword = await bcrypt.hash(req.body.password, salt)
+                req.body.password = hashPassword;
+                let urs = await database.getRepository(User).create(req.body);
+                let results = await database.getRepository(User).save(urs);
+                res.json(results);
+            }
             
-            res.json(results);
         }).catch(error =>{
             console.error("Error ", error);
             res.json(error);

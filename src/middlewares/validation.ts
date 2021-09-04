@@ -1,17 +1,13 @@
-const Joi = require('joi');
+import * as Joi from 'joi';
 
 //Register Validation
-const registrationValidation = (data) =>{
+export const validateObject = (schema: Joi.Schema, data: any): any => {
+    const res = schema.validate(data, { stripUnknown: true });
+  
+    if(res.error) {
+      throw new Error('failed validation');
+    }
+  
+    return res.value;
+  }
 
-    const schemaUser = {
-        firstName: Joi.string().min(3).required(),
-        lastName: Joi.string().min(3),
-        email:Joi.string().email().min(7).max(50).required(),
-        phoneNumber: Joi.number().required()
-    };
-
-    return Joi.validate(data, schemaUser)
-
-}
-
-module.exports.SchemaUser = registrationValidation;

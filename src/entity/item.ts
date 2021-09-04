@@ -18,6 +18,9 @@ export class Item{
     @Column("datetime")
     publishedDate:Date;
 
+    @Column()
+    image:string;
+
     @ManyToOne(type=> Category, category=> category.items)
     category: Category
 }

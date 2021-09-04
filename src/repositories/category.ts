@@ -24,6 +24,7 @@ const bcrypt = require('bcrypt');
    
 
     public saveCategory (req: Request, res: Response) {
+        console.log(req.body)
         connection.then(async database=>{
             let cat = await database.getRepository(Category).create(req.body);
             let results = await database.getRepository(Category).save(cat);
