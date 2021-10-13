@@ -1,4 +1,4 @@
-import UserRepository from '../repositories/user';
+import UserRepository from '../services/user.service';
 import * as Auth from '../middlewares/verifytoken';
 
 class UserRoute{
@@ -11,7 +11,8 @@ class UserRoute{
     public routes(app): void{
         app.get('/user', this.controller.getUsers);
         app.post('/user', this.controller.saveUser);
-        app.post('/login', Auth ,this.controller.login);
+        app.post('/login', this.controller.login);
+        app.get('/user/activation/:activation', this.controller.activationAccount);
         app.get('/user/:userId', this.controller.getUser);
         app.delete('/user/:userId', this.controller.deleteUser)
     }

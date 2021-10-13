@@ -1,6 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BeforeInsert} from "typeorm";
 import { IsEmail, IsDate, Min} from "class-validator";
-
+import * as bcrypt from 'bcryptjs';
 
 export enum UserRole {
     ADMIN = "admin",
@@ -37,6 +37,31 @@ export class User {
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
     createDate: string;
 
-    
+    @Column({default:false})
+    isActivated:boolean;
 
+    
+    public static hashPassword(password: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            bcrypt.hash(password, 10, (err, hash) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(hash);
+            });
+        });
+    }
+
+    public static comparePassword(user: User, password: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, user.password, (err, res) => {
+                resolve(res === true);
+            });
+        });
+    }
+
+    @BeforeInsert()
+    public async hashPassword(): Promise<void> {
+        this.password = await User.hashPassword(this.password);
+    }
 }

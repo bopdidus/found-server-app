@@ -1,5 +1,8 @@
 import * as multer from 'multer';
 import * as path from 'path';
+import { Buffer } from 'buffer';
+
+
 
 const imageFilter = function (req, file, cb) {
     // accept image only
@@ -20,4 +23,13 @@ const store = multer.diskStorage({
     }
 })
 
-export { imageFilter, store }
+const encrypt = (text) =>{
+    return new Buffer(text, 'utf8').toString('base64');
+} 
+
+const decrypt = (encryptedString) =>{
+    return new Buffer(""+encryptedString, 'base64').toString('ascii');
+} 
+
+
+export { imageFilter, store, encrypt, decrypt }

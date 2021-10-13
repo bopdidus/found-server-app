@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import CategoryRepository from '../repositories/category';
+import CategoryRepository from '../services/category.service';
 
 class CategoryRoute{
     private controller: CategoryRepository;

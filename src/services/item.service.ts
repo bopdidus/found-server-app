@@ -27,11 +27,12 @@ const maxSize = 50 * 1024 * 102
             if(err){
                 res.status(500).send({"message":err.message})
             }
-           
-          await  files.forEach((file)=>{
-                res.writeHead(200,{"Content-Type": "image/png"})
+          
+            await  files.forEach((file)=>{
+                
                 console.log(path.resolve(directoryPath+ file))
-                res.end(path.resolve(directoryPath+ file))
+                res.setHeader("Content-Type", "image/png")
+                res.download(path.resolve(directoryPath+ file))
             })
             
         })

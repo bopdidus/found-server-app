@@ -13,6 +13,8 @@
    "migrations": [
       "src/migration/**/*.ts"
    ],
+   "seeds": ["src/seeds/**/*{.ts,.js}"],
+   "factories": ["src/factories/**/*{.ts,.js}"],
    "subscribers": [
       "src/subscriber/**/*.ts"
    ],

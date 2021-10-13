@@ -1,4 +1,4 @@
-import ItemRepository from '../repositories/item';
+import ItemRepository from '../services/item.service';
 import * as multer from 'multer';
 import { imageFilter, store } from '../middlewares/utils';
 
