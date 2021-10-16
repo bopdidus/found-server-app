@@ -9,7 +9,7 @@ class UserRoute{
     }
 
     public routes(app): void{
-        app.get('/user', this.controller.getUsers);
+        app.get('/users', this.controller.getUsers);
         app.post('/user', this.controller.saveUser);
         app.post('/login', this.controller.login);
         app.get('/user/activation/:activation', this.controller.activationAccount);

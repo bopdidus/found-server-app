@@ -61,7 +61,7 @@ class App{
     
             this.categoryRoute.routes(this.app);
             this.itemRoute.routes(this.app);
-            //this.userRoute.routes(this.app);
+            this.userRoute.routes(this.app);
         })
     }
 

@@ -2,21 +2,19 @@ import { Category } from "../entity/category";
 import {Request, Response} from 'express';
 import { connection} from '../config/db';
 import { CategoryRepository } from "../repositories/category.repository";
+import { getManager } from "typeorm";
 const bcrypt = require('bcrypt');
 
 
  class CategoryService {
 
-    constructor(
-        private categoryRepository: CategoryRepository
-    ){ }
     
-    public find():Promise<Category[]>{
-        return this.categoryRepository.find({ relations: ['father']})
+    public  find():Promise<Category[]>{
+        return getManager().getRepository(Category).find({ relations: ['father']})
     }
 
     public findByFather(id: number): Promise<Category[]>{
-        return this.categoryRepository.find({
+        return getManager().getRepository(Category).find({
             where:{
                 father: id
             }
@@ -24,20 +22,21 @@ const bcrypt = require('bcrypt');
     }
 
     public findOne(id:number): Promise<Category>{
-        return this.categoryRepository.findOne(id);
+        return getManager().getRepository(Category).findOneOrFail(id);
     }
 
-    public async create(category: Category): Promise<Category>{
-        const newCate = await this.categoryRepository.save(category);
+    public async create(category: any): Promise<Category>{
+        let cat = getManager().getRepository(Category).create(category)[0];
+        const newCate = await getManager().getRepository(Category).save(cat);
         return newCate;
     }
 
     public update(id: number, category: Category): Promise<any>{
-        return this.categoryRepository.update(id, category);
+        return getManager().getRepository(Category).update(id, category);
     }
 
     public async delete(id: number): Promise<any>{
-        return  await this.categoryRepository.delete(id);
+        return getManager().getRepository(Category).delete(id);
     }
 
     /*public getCategories(req: Request, res: Response){
@@ -86,4 +85,4 @@ const bcrypt = require('bcrypt');
     }*/
 }
 
-export default CategoryService;
+export default new CategoryService();
