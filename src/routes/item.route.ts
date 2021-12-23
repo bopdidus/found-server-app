@@ -1,16 +1,17 @@
 import ItemRepository from '../services/item.service';
 import * as multer from 'multer';
 import { imageFilter, store } from '../middlewares/utils';
+import ItemController from '../../controllers/item.controller';
 
 const maxSize = 50 * 1024 * 1024;
 
 const upload = multer({ storage: store});
 
 class ItemRoute{
-    private controller: ItemRepository;
+    private controller: ItemController;
 
     constructor(){
-        this.controller = new ItemRepository();
+        this.controller = new ItemController();
     }
 
     public routes(app): void{

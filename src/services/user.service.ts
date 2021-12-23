@@ -12,9 +12,13 @@ import { decrypt } from '../middlewares/utils';
 
     public async getUsers(req: Request, res: Response){
         const users: User[] = await getManager().getRepository(User).find();
-        res.json(users);
+        res.status(200).send(users);
     }
-   
+    
+    public async count(req: Request, res: Response){
+        
+    }
+
     public async saveUser (req: Request, res: Response) {
         
             const errors = await validate(req.body);

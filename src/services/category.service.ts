@@ -7,8 +7,7 @@ const bcrypt = require('bcrypt');
 
 
  class CategoryService {
-
-    
+/*
     public  find():Promise<Category[]>{
         return getManager().getRepository(Category).find({ relations: ['father']})
     }
@@ -26,6 +25,7 @@ const bcrypt = require('bcrypt');
     }
 
     public async create(category: any): Promise<Category>{
+        console.log('je viens dentrer', category)
         let cat = getManager().getRepository(Category).create(category)[0];
         const newCate = await getManager().getRepository(Category).save(cat);
         return newCate;
@@ -37,9 +37,9 @@ const bcrypt = require('bcrypt');
 
     public async delete(id: number): Promise<any>{
         return getManager().getRepository(Category).delete(id);
-    }
+    }*/
 
-    /*public getCategories(req: Request, res: Response){
+    public getCategories(req: Request, res: Response){
         connection.then(async database=>{
             const cats: Category[] = await database.getRepository(Category).find({ relations: ["father"] });
             console.log(cats);
@@ -56,8 +56,18 @@ const bcrypt = require('bcrypt');
         console.log(req.body)
         connection.then(async database=>{
             let cat = await database.getRepository(Category).create(req.body);
-            let results = await database.getRepository(Category).save(cat);
-            res.json(results);
+           // if(cat[0].father == undefined) { cat[0].father = null}
+            database.getRepository(Category).save(cat).then(value=>{
+                console.log(value)
+                res.json(value);
+               
+            }).catch(err=>{
+                console.log(err);
+                res.status(500).send("There are some error")
+                
+            })
+            
+            
         }).catch(error =>{
             console.error("Error ", error);
             res.json(error);
@@ -75,14 +85,17 @@ const bcrypt = require('bcrypt');
     }
     
     public deleteCategory (req: Request, res: Response){
+        console.log(req.params.categoryId)
         connection.then(async database=>{
+          
             let results = await database.getRepository(Category).delete(req.params.categoryId);
+            console.log(results)
             res.json(results);
         }).catch(error =>{
             console.error("Error ", error);
             res.json(error);
         })
-    }*/
+    }
 }
 
-export default new CategoryService();
+export default CategoryService;

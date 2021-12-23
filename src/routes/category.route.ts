@@ -1,12 +1,11 @@
 import {Request, Response} from 'express';
-import CategoryController from '../../controllers/category.controller';
-import CategoryRepository from '../services/category.service';
+import categoryService from '../services/category.service';
 
 class CategoryRoute{
-    private controller: CategoryController;
+    private controller: categoryService;
 
     constructor(){
-        this.controller = new CategoryController();
+        this.controller = new categoryService();
     }
 
     public routes(app): void{

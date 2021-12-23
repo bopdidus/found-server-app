@@ -1,14 +1,44 @@
 import { Item } from "../entity/item";
 import {Request, Response} from 'express';
-import { connection} from '../config/db';
-import * as fs from 'fs';
-import * as path from 'path';
+import { getManager } from "typeorm";
 const maxSize = 50 * 1024 * 102
 
- class ItemRepository {
+ class ItemService {
 
-    constructor(){}
+    public  find():Promise<Item[]>{
+        return getManager().getRepository(Item).find({ relations: ['father']})
+    }
 
+    public findByFather(id: number): Promise<Item[]>{
+        return getManager().getRepository(Item).find({
+            where:{
+                father: id
+            }
+        })
+    }
+
+    public findOne(id:number): Promise<Item>{
+        return getManager().getRepository(Item).findOneOrFail(id);
+    }
+
+    public async create(item: any): Promise<Item>{
+        item.publishedDate = new Date()
+        let cat = getManager().getRepository(Item).create(item)[0];
+        const newCate = await getManager().getRepository(Item).save(cat);
+        return newCate;
+    }
+
+    public update(id: number, item: Item): Promise<any>{
+        return getManager().getRepository(Item).update(id, item);
+    }
+
+    public async delete(id: number): Promise<any>{
+        return getManager().getRepository(Item).delete(id);
+    }
+
+
+
+/*
     public getItems(req: Request, res: Response){
         connection.then(async database=>{
             const items: Item[] = await database.getRepository(Item).find();
@@ -69,7 +99,7 @@ const maxSize = 50 * 1024 * 102
             console.error("Error ", error);
             res.json(error);
         })
-    }
+    }*/
 }
 
-export default ItemRepository;
+export default new ItemService();
