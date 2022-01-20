@@ -1,10 +1,14 @@
 import { Item } from "../entity/item";
 import {Request, Response} from 'express';
 import { getManager } from "typeorm";
+import { connection} from '../config/db';
+import * as fs from 'fs';
+import * as path from 'path';
+
 const maxSize = 50 * 1024 * 102
 
  class ItemService {
-
+/*
     public  find():Promise<Item[]>{
         return getManager().getRepository(Item).find({ relations: ['father']})
     }
@@ -38,52 +42,66 @@ const maxSize = 50 * 1024 * 102
 
 
 
-/*
+*/
     public getItems(req: Request, res: Response){
         connection.then(async database=>{
             const items: Item[] = await database.getRepository(Item).find();
-            
-            res.json(items); 
+
+            res.status(201).send(items); 
         }).catch(error =>{
             console.error("Error ", error);
-            res.json(error);
+            res.status(500).send(error);
         })
     }
 
-    public getImages(req:Request, res: Response){
+   /* public getImages(req:Request, res: Response){
         
         const directoryPath = "./uploads/";
-        fs.readdir(directoryPath, async function(err, files){
+        fs.readdir(directoryPath, function(err, files){
             if(err){
                 res.status(500).send({"message":err.message})
             }
-          
-            await  files.forEach((file)=>{
+            console.log(files)
+            let photos = [];
+            files.forEach((file)=>{
                 
-                console.log(path.resolve(directoryPath+ file))
-                res.setHeader("Content-Type", "image/png")
-                res.download(path.resolve(directoryPath+ file))
+                fs.readFile(path.resolve(directoryPath+ file), function(err, content) {
+                    if (err) {
+                        res.status(500).send({"message":err.message})
+                    }
+                    photos.push(content);
+                  }); 
             })
-            
+            res.send(photos)
         })
     }
-   
+   */
     public saveItem (req: Request, res: Response) {
-        connection.then(async database=>{
-            req.body.publishedDate = new Date()
-            let its = await database.getRepository(Item).create(req.body);
-            let results = await database.getRepository(Item).save(its);
-            
-            res.json(results);
-        }).catch(error =>{
-            console.error("Error ", error);
-            res.json(error);
-        })
+        if(req.body.title != undefined){
+            connection.then(async database=>{
+                try {
+                    req.body.publishedDate = new Date()
+                    let its = await database.getRepository(Item).create(req.body);
+                    let results = await database.getRepository(Item).save(its);
+                    
+                    res.json(results);
+                } catch (error) {
+                    res.status(501).send("there are some errors")
+                }
+               
+            }).catch(error =>{
+                console.error("Error ", error);
+                res.json(error);
+            })
+        }else{
+            res.status(500).send("Error")
+        }
+       
     }
 
     public getItem (req: Request, res: Response){
         connection.then(async database=>{
-            let results = await database.getRepository(Item).findOne(req.params.itemId);
+            let results = await database.getRepository(Item).findOne(req.params.itemId, {relations:['category']});
             res.json(results);
         }).catch(error =>{
             console.error("Error ", error);
@@ -99,7 +117,7 @@ const maxSize = 50 * 1024 * 102
             console.error("Error ", error);
             res.json(error);
         })
-    }*/
+    }
 }
 
-export default new ItemService();
+export default  ItemService;

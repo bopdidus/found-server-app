@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import app from './server/app'
+import * as express from 'express';
 
 const PORT = 3000;
 

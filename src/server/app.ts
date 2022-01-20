@@ -1,5 +1,4 @@
 import * as express from 'express'
-import * as bodyParser from 'body-parser'; 
 import CategoryRoute from '../routes/category.route';
 import ItemRoute from '../routes/item.route';
 import UserRoute from '../routes/user.route';
@@ -23,6 +22,7 @@ class App{
        // this.app.use(bodyParser.json({limit: '50mb'}));
         this.app.use(express.json());
         this.app.use(express.static(__dirname));
+        this.app.use('/resources', express.static("./uploads"));
         //this.app.use(express.json());
         this.app.use(cors());
         //this.app.use(multer().any())

@@ -74,12 +74,13 @@ import { decrypt } from '../middlewares/utils';
                 console.log(req.body.username, "email login")
                 
                 const user = await getManager().getRepository(User).findOneOrFail({email:req.body.username});
+               
                 if(!user) return res.status(400).send("Email or Password is Wrong")
     
                 if(user.isActivated == false){
                     return res.status(500).send("Your account is not activated")
                 }
-    
+                console.log(req.body.password,'cest plutot ici');
                 const validPass = await bcrypt.compare(req.body.password, user.password)
                 if(!validPass) return res.status(400).send("Email or Password is Wrong");
                 

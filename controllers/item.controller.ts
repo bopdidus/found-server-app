@@ -9,7 +9,7 @@ class ItemController{
     
     constructor(){
     }
-
+/*
     public async getItems(req: Request, res: Response){
        
         const cats: Item[] = await ItemService.find();
@@ -52,6 +52,6 @@ class ItemController{
             
         })
     }
-
+*/
 }
 export default ItemController;
