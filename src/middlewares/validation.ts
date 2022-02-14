@@ -26,7 +26,7 @@ export const check_authorization = (req, res, next) =>{
         let userRight =  await database.getRepository(User).findOne({email: Email})
         
         if(userRight){
-          console.log(userRight,'alles ist ok');
+          console.log('alles ist ok');
           
            next();
         }else{

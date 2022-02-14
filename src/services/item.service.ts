@@ -46,7 +46,7 @@ const maxSize = 50 * 1024 * 102
     public getItems(req: Request, res: Response){
         connection.then(async database=>{
             const items: Item[] = await database.getRepository(Item).find();
-
+            console.log(items);
             res.status(201).send(items); 
         }).catch(error =>{
             console.error("Error ", error);

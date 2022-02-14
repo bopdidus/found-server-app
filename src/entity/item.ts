@@ -21,6 +21,9 @@ export class Item{
     @Column()
     image:string;
 
+    @Column()
+    categoryId:number;
+
     @ManyToOne(type=> Category, category=> category.items)
     category: Category
 }

@@ -42,7 +42,7 @@ const bcrypt = require('bcrypt');
     public getCategories(req: Request, res: Response){
         connection.then(async database=>{
             const cats: Category[] = await database.getRepository(Category).find({ relations: ["father"] });
-            console.log(cats);
+           // console.log(cats);
             res.json(cats);
         }).catch(error =>{
             console.error("Error ", error);
