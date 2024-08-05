@@ -1,0 +1,22 @@
+{
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6"
+      ],
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "outDir": "./build",
+      "resolveJsonModule": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
+      
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+   },
+   "include": ["src/**/*.ts", "src/__test__/index.test.ts"],
+   "exclude": ["node_modules", "__test__"]
+}

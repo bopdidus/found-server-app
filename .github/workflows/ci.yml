@@ -1,0 +1,38 @@
+#Author: Brice BOPDA
+name: CI on github actions
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+jobs:
+  test:
+    runs-on: [ubuntu-latest, windows-latest]
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use latest node
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.0.9
+    - name: install dependencies
+      run: npm install
+
+    - name: Launch test
+      run: npm test
+
+    services:
+      postgres: 
+        image: postgres:alpine
+        ports: 
+          - 5430:5430
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
+          POSTGRES_USER: ${{ secrets.CI_DB_USER }}
+    - name: docker
+      run: docker compose -f docker-compose.build.yml up -d
+
+# test if the build has completed and the stop the docker

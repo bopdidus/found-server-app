@@ -1,0 +1,23 @@
+version: '4'
+services:
+  database:
+    image: postgres:alpine
+    container_name: postgres_found
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: found_user
+      POSTGRES_DB: found_db
+    ports:
+      - '5430:5430'
+    command: -p 5430
+
+  app:
+    container_name: docker-found-server
+    restart: always
+    build: .
+    ports:
+      - '82:3000'
+    links:
+      - database
+  
+    
