@@ -14,14 +14,14 @@ jobs:
     name: my jobs
     runs-on: [ubuntu-latest, windows-latest]
     
-    services:
-      postgres: 
-        image: postgres:alpine
-        ports: 
-          - 5432:5432  # Adjusted to the default PostgreSQL port
-        env:
-          POSTGRES_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
-          POSTGRES_USER: ${{ secrets.CI_DB_USER }}
+    #services:
+      #postgres: 
+        #image: postgres:alpine
+        #ports: 
+          #- 5432:5432  # Adjusted to the default PostgreSQL port
+        #env:
+          #POSTGRES_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
+          #POSTGRES_USER: ${{ secrets.CI_DB_USER }}
 
     steps:
       - uses: actions/checkout@v4
