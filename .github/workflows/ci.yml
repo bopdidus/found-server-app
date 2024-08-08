@@ -12,7 +12,7 @@ on:
 jobs:
   job1:
     name: my jobs
-    runs-on: [ubuntu-latest, windows-latest]
+    runs-on: ubuntu-latest
     
     #services:
       #postgres: 
@@ -37,9 +37,9 @@ jobs:
       - name: Launch tests
         run: npm test
 
-      - name: Start Docker services
-        run: docker-compose -f docker-compose.build.yml up -d
+      #- name: Start Docker services
+        #run: docker-compose -f docker-compose.build.yml up -d
 
-      - name: Stop Docker services
-        if: always()  # Ensures Docker is stopped even if the tests fail
-        run: docker-compose -f docker-compose.build.yml down
+      #- name: Stop Docker services
+        #if: always()  # Ensures Docker is stopped even if the tests fail
+        #run: docker-compose -f docker-compose.build.yml down
